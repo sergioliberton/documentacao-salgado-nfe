@@ -22,6 +22,30 @@ Este documento apresenta **exemplos completos e práticos** de uso da biblioteca
 ### 📋 **Cenário**
 Loja física vendendo para pessoa física com CPF informado.
 
+### 🏭 **Configuração de Ambiente**
+
+#### **🔧 Para Testes (Homologação)**
+```java
+// Use sempre homologação para desenvolvimento
+nfe.setIdentificacaoAmbiente(IdentificacaoAmbiente.homologacao);
+
+// Dados de teste permitidos
+emitente.setDocumento("99999999000191"); // CNPJ de teste
+destinatario.setDocumento("11111111111"); // CPF de teste
+```
+
+#### **🚀 Para Produção (Emissão Real)**
+```java
+// Apenas após homologação aprovada
+nfe.setIdentificacaoAmbiente(IdentificacaoAmbiente.producao);
+
+// Dados reais obrigatórios
+emitente.setDocumento("12345678000195"); // CNPJ real
+destinatario.setDocumento("12345678901"); // CPF real
+```
+
+### 💻 **Código Completo**
+
 ```java
 import o.famoso.nfe.*;
 import o.famoso.nfe.cliente.*;
@@ -35,7 +59,14 @@ public class ExemploNFeB2C {
             // 1. Criar NFe para consumidor final
             NFe nfe = new NFe();
             nfe.setTipoOperacao(TipoOperacao.saida);
+            
+            // 🔧 ESCOLHA O AMBIENTE:
+            // Para testes (recomendado para desenvolvimento)
             nfe.setIdentificacaoAmbiente(IdentificacaoAmbiente.homologacao);
+            
+            // Para produção (apenas após homologação aprovada)
+            // nfe.setIdentificacaoAmbiente(IdentificacaoAmbiente.producao);
+            
             nfe.setFinalidadeOperacao(FinalidadeOperacao.normal);
             nfe.setNaturezaOperacaoDescricao("Venda de mercadorias");
             nfe.setConsumidorFinal(OperacaoComConsumidorFinal.sim);
@@ -1707,6 +1738,97 @@ public class NFeUtils {
    - [ ] Executar validação completa
    - [ ] Corrigir erros encontrados
    - [ ] Verificar consistência
+
+---
+
+## 🏭 **Guia Completo de Ambientes**
+
+### 🔧 **Ambiente de Homologação (Desenvolvimento)**
+
+**Quando usar:**
+- ✅ Desenvolvimento e testes
+- ✅ Validação de código
+- ✅ Demonstrações
+- ✅ Treinamento
+
+**Configuração:**
+```java
+// Sempre use homologação para desenvolvimento
+nfe.setIdentificacaoAmbiente(IdentificacaoAmbiente.homologacao);
+
+// Dados de teste são permitidos
+emitente.setDocumento("99999999000191"); // CNPJ de teste
+destinatario.setDocumento("11111111111"); // CPF de teste
+```
+
+**Características:**
+- ✅ **CNPJ/CPF de teste** aceitos
+- ✅ **Validações menos rigorosas**
+- ✅ **Não gera NFe real** na SEFAZ
+- ✅ **Ideal para desenvolvimento**
+
+### 🚀 **Ambiente de Produção (Emissão Real)**
+
+**Quando usar:**
+- ⚠️ Apenas após homologação aprovada
+- ⚠️ Emissão real de NFe
+- ⚠️ Sistema em produção
+
+**Configuração:**
+```java
+// Apenas após homologação aprovada
+nfe.setIdentificacaoAmbiente(IdentificacaoAmbiente.producao);
+
+// Dados reais obrigatórios
+emitente.setDocumento("12345678000195"); // CNPJ real
+destinatario.setDocumento("12345678901"); // CPF real
+```
+
+**Requisitos:**
+- ⚠️ **Certificado digital** válido
+- ⚠️ **CNPJ/CPF reais** (não de teste)
+- ⚠️ **Homologação aprovada** na SEFAZ
+- ⚠️ **Configuração correta** do NeverStop/TecnoSpeed
+
+### 📋 **Checklist de Migração para Produção**
+
+1. **Certificado Digital**
+   - [ ] Instalado no sistema
+   - [ ] Válido e não expirado
+   - [ ] Configurado no NeverStop/TecnoSpeed
+
+2. **Dados da Empresa**
+   - [ ] CNPJ real (não de teste)
+   - [ ] Inscrição estadual válida
+   - [ ] Endereço completo e correto
+
+3. **Configuração do Sistema**
+   - [ ] NeverStop/TecnoSpeed configurado
+   - [ ] Certificado digital selecionado
+   - [ ] Ambiente de produção ativo
+
+4. **Testes Obrigatórios**
+   - [ ] Teste em homologação aprovado
+   - [ ] Validações passando
+   - [ ] TX2 gerado corretamente
+
+5. **Migração**
+   - [ ] Alterar código para `IdentificacaoAmbiente.producao`
+   - [ ] Usar dados reais
+   - [ ] Testar primeira NFe
+
+### ⚠️ **Avisos Importantes**
+
+**Nunca use produção para:**
+- ❌ Desenvolvimento
+- ❌ Testes
+- ❌ Demonstrações
+- ❌ Treinamento
+
+**Sempre teste primeiro em:**
+- ✅ Homologação
+- ✅ Dados de teste
+- ✅ Validações completas
 
 ---
 

@@ -61,7 +61,31 @@ jar -cf biblioteca-nfe.jar -C bin .
 
 ## 💡 **Uso Básico**
 
-### Exemplo Simples - NFe de Venda
+### 🏭 **Configuração de Ambientes**
+
+A biblioteca suporta dois ambientes de emissão de NFe:
+
+#### **🔧 Ambiente de Homologação (Teste)**
+```java
+// Para testes e desenvolvimento
+nfe.setIdentificacaoAmbiente(IdentificacaoAmbiente.homologacao);
+```
+- ✅ **Permitido**: Testes sem restrições
+- ✅ **Validação**: Menos rigorosa
+- ✅ **Transmissão**: Não gera NFe real
+- ✅ **Uso**: Desenvolvimento e testes
+
+#### **🚀 Ambiente de Produção (Real)**
+```java
+// Para emissão real de NFe
+nfe.setIdentificacaoAmbiente(IdentificacaoAmbiente.producao);
+```
+- ⚠️ **Obrigatório**: Certificado digital válido
+- ⚠️ **Validação**: Rigorosa e completa
+- ⚠️ **Transmissão**: Gera NFe real na SEFAZ
+- ⚠️ **Uso**: Apenas após homologação aprovada
+
+### 📋 **Exemplo Simples - NFe de Venda**
 
 ```java
 import o.famoso.nfe.*;
@@ -76,7 +100,14 @@ public class ExemploNFe {
             // 1. Criar NFe
             NFe nfe = new NFe();
             nfe.setTipoOperacao(TipoOperacao.saida);
+            
+            // 🔧 ESCOLHA O AMBIENTE:
+            // Para testes (recomendado para desenvolvimento)
             nfe.setIdentificacaoAmbiente(IdentificacaoAmbiente.homologacao);
+            
+            // Para produção (apenas após homologação aprovada)
+            // nfe.setIdentificacaoAmbiente(IdentificacaoAmbiente.producao);
+            
             nfe.setFinalidadeOperacao(FinalidadeOperacao.normal);
             nfe.setNaturezaOperacaoDescricao("Venda de produtos");
             
@@ -202,6 +233,42 @@ o.famoso.nfe/
 
 ## 🎯 **Cenários de Uso**
 
+### 🏭 **Ambientes de Emissão**
+
+#### **🔧 Homologação (Desenvolvimento/Teste)**
+```java
+// Configuração para testes
+nfe.setIdentificacaoAmbiente(IdentificacaoAmbiente.homologacao);
+
+// Dados de teste permitidos
+emitente.setDocumento("99999999000191"); // CNPJ de teste
+destinatario.setDocumento("11111111111"); // CPF de teste
+```
+
+**Características:**
+- ✅ **CNPJ/CPF de teste** são aceitos
+- ✅ **Validações menos rigorosas**
+- ✅ **Não gera NFe real** na SEFAZ
+- ✅ **Ideal para desenvolvimento**
+
+#### **🚀 Produção (Emissão Real)**
+```java
+// Configuração para emissão real
+nfe.setIdentificacaoAmbiente(IdentificacaoAmbiente.producao);
+
+// Dados reais obrigatórios
+emitente.setDocumento("12345678000195"); // CNPJ real
+destinatario.setDocumento("12345678901"); // CPF real
+```
+
+**Características:**
+- ⚠️ **CNPJ/CPF reais** obrigatórios
+- ⚠️ **Certificado digital** válido necessário
+- ⚠️ **Gera NFe real** na SEFAZ
+- ⚠️ **Apenas após homologação aprovada**
+
+### 📋 **Cenários Específicos**
+
 ### 1. NFe B2B (Empresa para Empresa)
 ```java
 // NFe com ICMS, destinatário PJ com IE
@@ -304,6 +371,7 @@ A biblioteca implementa mais de **200 validações automáticas**:
 - **[GUIA_CAMPOS_NFE.md](./GUIA_CAMPOS_NFE.md)** - Mapa completo de todos os campos
 - **[GUIA_VALIDACOES.md](./GUIA_VALIDACOES.md)** - Documentação de validações
 - **[EXEMPLOS_USO.md](./EXEMPLOS_USO.md)** - Exemplos para diferentes cenários  
+- **[GUIA_AMBIENTES.md](./GUIA_AMBIENTES.md)** - Configuração de homologação e produção
 - **[JavaDoc](./javadoc/)** - Documentação das classes
 
 ---
@@ -355,6 +423,25 @@ nfe.setEmitente(emitente);     // ✅ Obrigatório
 nfe.setDestinatario(destinatario); // ✅ Obrigatório  
 nfe.setProdutos(itens);        // ✅ Pelo menos 1 item
 nfe.setPagamentos(pagamentos); // ✅ Pelo menos 1 pagamento
+```
+
+**Erro: "Ambiente de produção não permitido"**
+```java
+// Para testes, use sempre homologação
+nfe.setIdentificacaoAmbiente(IdentificacaoAmbiente.homologacao);
+
+// Para produção, certifique-se de ter:
+// 1. Certificado digital válido
+// 2. CNPJ/CPF reais (não de teste)
+// 3. Homologação aprovada na SEFAZ
+```
+
+**Erro: "Certificado digital não encontrado"**
+```java
+// Em produção, configure o certificado:
+// 1. Instale o certificado no sistema
+// 2. Configure o caminho no NeverStop/TecnoSpeed
+// 3. Teste primeiro em homologação
 ```
 
 ### Contato
