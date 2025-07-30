@@ -1,0 +1,15 @@
+Biblioteca NFe "O Famoso NFe"
+Versao: 1.0
+Data: 30/07/2025  0:31:26,44
+JAR: biblioteca-nfe.jar
+
+Arquivos incluidos:
+- Biblioteca JAR principal
+- Documentacao completa
+- Exemplos de uso
+- Testes de validacao
+- JavaDoc das classes
+- Scripts de instalacao e teste
+
+Para instalar: execute instalar.bat
+Para testar: execute testar.bat
